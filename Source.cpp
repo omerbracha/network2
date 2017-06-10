@@ -5,7 +5,7 @@
 #include <String.h>
 #include <fstream>
 #include <sstream>
-
+#include <iterator>
 
 
 struct packet_t{
@@ -33,16 +33,25 @@ typedef struct flow_t* Flow;
 
 
 
-Packet parsePacket(std::string line){
+Packet parsePacket(std::string line, int default_weight){
     Packet p = (Packet)malloc(sizeof(packet_t));
     
     if(!p)
         return NULL;
-//    std::istringstream some_stream(line);
+    std::istringstream iss(line);
+	std::vector<std::string> tokens{ std::istream_iterator<std::string>{iss},
+		std::istream_iterator<std::string>{} };
+	
 //    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
     // use sscanf on line.c_str if this doesn't work
-    sscanf(line.c_str, "%ld %ld %s %hu %s %hu %d %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length, p->weight);
-    return p;
+	if (tokens.size() == 8) {
+		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length, p->weight);
+	}
+	else {
+		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length);
+		p->weight = default_weight;
+	}
+	return p;
 }
 
 void push_packet(Packet packet, std::vector<Flow> flows) {
@@ -82,7 +91,7 @@ int main(int argc, char* argv[]) {
 
 		std::string line;
 		std::getline(infile, line);
-		Packet p = parsePacket(line);
+		Packet p = parsePacket(line, default_weight);
 		
 		while (std::getline(infile, line)) {
 			push_packet(p, flows);
