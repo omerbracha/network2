@@ -23,9 +23,9 @@ typedef struct packet_t* Packet;
 
 struct flow_t{
     std::deque <Packet> packets; // Packet
-	short Saddr[4];
+	char* Saddr;
 	short Sport;
-	short Daddr[4];
+	char* Daddr;
 	short Dport;
 };
 
@@ -44,14 +44,14 @@ Packet parsePacket(std::string line){
     vector<string> strings;
     std::istringstream in(line);
     string s;
-    sscanf(line.c_str)
+	sscanf(line.c_str);
     
     
 }
 
 void push_packet(Packet packet, std::vector<Flow> flows) {
 	for each (Flow flow in flows) {
-		if ( (packet->Saddr == flow->Saddr) && (packet->Sport == flow->Sport) && (packet->Daddr == flow->Daddr) && (packet->Dport == flow->Dport) ){
+		if ( (strcmp(packet->Saddr,flow->Saddr) == 0) && (packet->Sport == flow->Sport) && (strcmp(packet->Daddr,flow->Daddr) == 0) && (packet->Dport == flow->Dport) ){
 			flow->packets.push_back(packet);
 		}
 	}
@@ -59,7 +59,7 @@ void push_packet(Packet packet, std::vector<Flow> flows) {
 
 
 int main(int argc, char* argv[]) {
-	long pktID, time;
+	long pktID, time, packtime = 0;
 	char *sAdd, *dAdd, *ptr, *type, *input_file, *output_file;
 	int sPort, dPort, length, weight, default_weight, quantum;
 	std::vector<Flow> flows;
@@ -81,14 +81,17 @@ int main(int argc, char* argv[]) {
     
 	std::ifstream infile(input_file);
 	//input = fopen(input_file, "r");
+	
+	if (deficit == 0) {
 
-	std::string line;
-	while (std::getline(infile, line)) {
-		Packet p = parsePacket(line);
-		push_packet(p, flows);
+		std::string line;
+		while (std::getline(infile, line)) {
+			Packet p = parsePacket(line);
+			push_packet(p, flows);
+			packtime = p->time;
+		}
+
 	}
-
-
 
 
 
