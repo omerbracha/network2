@@ -1,19 +1,16 @@
 ﻿  Source.cpp
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(48): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(51): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(88): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(163): warning C4018: '<': signed/unsigned mismatch
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(104): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.14393.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(68): warning C4101: 'sAdd': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(72): warning C4101: 'output': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(69): warning C4101: 'weight': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(67): warning C4101: 'pktID': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(68): warning C4101: 'dAdd': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(69): warning C4101: 'sPort': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(67): warning C4101: 'time': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(69): warning C4101: 'length': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(68): warning C4101: 'ptr': unreferenced local variable
-c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(69): warning C4101: 'dPort': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(88): warning C4101: 'input': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(84): warning C4101: 'sAdd': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(85): warning C4101: 'weight': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(83): warning C4101: 'pktID': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(84): warning C4101: 'dAdd': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(85): warning C4101: 'sPort': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(83): warning C4101: 'time': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(85): warning C4101: 'length': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(84): warning C4101: 'ptr': unreferenced local variable
+c:\users\omer\documents\visual studio 2017\projects\network2\network2\source.cpp(85): warning C4101: 'dPort': unreferenced local variable
   network2.vcxproj -> c:\users\omer\documents\visual studio 2017\Projects\network2\Debug\network2.exe
   network2.vcxproj -> c:\users\omer\documents\visual studio 2017\Projects\network2\Debug\network2.pdb (Partial PDB)

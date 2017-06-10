@@ -7,13 +7,14 @@
 #include <sstream>
 #include <iterator>
 
+using namespace std;
 
 struct packet_t{
   long pId;
   long time;
-  char* Saddr;
+  string Saddr;
   short Sport;
-  char* Daddr;
+  string Daddr;
   short Dport;
   int length;
   int weight;
@@ -22,11 +23,13 @@ struct packet_t{
 typedef struct packet_t* Packet;
 
 struct flow_t{
-    std::deque <Packet> packets; // Packet
-	char* Saddr;
+    deque <Packet> packets; // Packet
+	string Saddr;
 	short Sport;
-	char* Daddr;
+	string Daddr;
 	short Dport;
+	int weight;
+	int credits;
 };
 
 typedef struct flow_t* Flow;
@@ -34,8 +37,8 @@ typedef struct flow_t* Flow;
 
 
 Packet parsePacket(std::string line, int default_weight){
-    Packet p = (Packet)malloc(sizeof(packet_t));
-    
+    Packet p = new packet_t;
+	
     if(!p)
         return NULL;
     std::istringstream iss(line);
@@ -44,21 +47,36 @@ Packet parsePacket(std::string line, int default_weight){
 	
 //    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
     // use sscanf on line.c_str if this doesn't work
-	if (tokens.size() == 8) {
-		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d %d", &p->pId, &p->time, &p->Saddr, &p->Sport, &p->Daddr, &p->Dport, &p->length, &p->weight);
-	}
-	else {
-		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d", &p->pId, &p->time, &p->Saddr, &p->Sport, &p->Daddr, &p->Dport, &p->length);
-		p->weight = default_weight;
-	}
+	p->pId = stol(tokens[0]);
+	p->time = stol(tokens[1]);
+	p->Saddr = tokens[2];
+	p->Sport = stoi(tokens[3]);
+	p->Daddr = tokens[4];
+	p->Dport = stoi(tokens[5]);
+	p->length = stoi(tokens[6]);
+	p->weight = (tokens.size() == 8) ? stoi(tokens[7]) : default_weight;
 	return p;
 }
 
-void push_packet(Packet packet, std::vector<Flow> flows) {
-	for each (Flow flow in flows) {
-		if ( (strcmp(packet->Saddr,flow->Saddr) == 0) && (packet->Sport == flow->Sport) && (strcmp(packet->Daddr,flow->Daddr) == 0) && (packet->Dport == flow->Dport) ){
+void push_packet(Packet packet, std::vector<Flow> *flows, int quantum) {
+	bool no_matching_flow = true;
+	for each (Flow flow in *flows) {
+		if ( (packet->Saddr.compare(flow->Saddr) == 0) && (packet->Sport == flow->Sport) && (packet->Daddr.compare(flow->Daddr) == 0) && (packet->Dport == flow->Dport) ){
 			flow->packets.push_back(packet);
+			no_matching_flow = false;
 		}
+	}
+	if (no_matching_flow) {
+		Flow flow = new flow_t;
+		flow->Saddr = packet->Saddr;
+		flow->Sport = packet->Sport;
+		flow->Daddr = packet->Daddr;
+		flow->Dport = packet->Dport;
+		flow->weight = packet->weight;
+		flow->credits = 0;
+		flows->push_back(flow);
+		//std::deque<Packet> packs();
+		flow->packets.push_back(packet);
 	}
 }
 
@@ -72,7 +90,7 @@ int main(int argc, char* argv[]) {
 	FILE *input, *output;
 
 	if (argc < 5) {
-		printf("not enough parameters, exiting...");
+		printf("not enough parameters, exiting...\n");
 		return -1;
 	}
 	type = argv[1];
@@ -85,24 +103,88 @@ int main(int argc, char* argv[]) {
     deficit = strcmp("RR", type) != 0;
     
 	std::ifstream infile(input_file);
-	input = fopen(input_file, "r");
-	
-	if (deficit == false) {
-
-		std::string line;
-		std::getline(infile, line);
-		Packet p = parsePacket(line, default_weight);
-		
-		while (std::getline(infile, line)) {
-			push_packet(p, flows);
-			packtime = p->time;
-		}
-
+	output = fopen(output_file, "w");
+	if (!output) {
+		printf("no output file now we cry \n");
+		return 1;
 	}
 
+	packtime = 0;
+	Packet p, futurePacket = NULL;
+	bool more_packets = false;
+	int is_in_progress = 0;
+	int curr_weight = -1;
+	int curr_flow = 0;
+	Packet curr_pack;
+	bool read_more = true;
 
+	if (deficit == false) {
 
+		while (1) {
+			if (futurePacket != NULL){
+				if (futurePacket->time == packtime) {
+					push_packet(futurePacket, &flows);
+					futurePacket = NULL;
+					read_more = true;
+				}
+				else{
+					read_more = false;
+				}
+			}
 
+			std::string line;
+			if (read_more) {
+				while (std::getline(infile, line)) {
+					p = parsePacket(line, default_weight);
+					if (flows.empty()) {
+						packtime = p->time;
+					}
+					if (p->time > packtime) {
+						futurePacket = p;
+						break;
+					}
+					push_packet(p, &flows);
+				}
+			}
+			
+			if ((--is_in_progress) > 0) { // if current packet is still sending (size hasnt reduced to 0)
+				packtime++;
+				continue;
+			}
 
+			more_packets = false;
+			if ((curr_weight > 0) && (!flows[curr_flow]->packets.empty())) { // take next packet from same flow
+				more_packets = true;
+			}
+			else if (curr_weight == -1) {
+				curr_flow = 0;
+				more_packets = true;
+				curr_weight = flows[curr_flow]->weight;
+			}
+			else {//take packet from next flow for equality
+				for (int i = 0; i < flows.size(); i++) {
+					curr_flow = (++curr_flow) % flows.size();
+					if (!flows[curr_flow]->packets.empty()) {
+						more_packets = true;
+						curr_weight = flows[curr_flow]->weight;
+						break;
+					}
+				}
+			}
+
+			if (!more_packets)
+				break;
+
+			// now we have a flow to work from
+			curr_pack = flows[curr_flow]->packets.front();
+			flows[curr_flow]->packets.pop_front();
+			is_in_progress = curr_pack->length;
+			curr_weight--;
+
+			fprintf(output, "%ld: %ld\n", packtime, curr_pack->pId);
+			// incrementing time is important for getting old
+			packtime++;
+		}
+	}
 	return 0;
 }
