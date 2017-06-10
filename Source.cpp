@@ -3,6 +3,8 @@
 #include <queue>
 #include <vector>
 #include <String.h>
+#include <fstream>
+#include <sstream>
 
 
 
@@ -21,6 +23,10 @@ typedef struct packet_t* Packet;
 
 struct flow_t{
     std::deque <Packet> packets; // Packet
+	short Saddr[4];
+	short Sport;
+	short Daddr[4];
+	short Dport;
 };
 
 typedef struct flow_t* Flow;
@@ -43,6 +49,14 @@ Packet parsePacket(std::string line){
     
 }
 
+void push_packet(Packet packet, std::vector<Flow> flows) {
+	for each (Flow flow in flows) {
+		if ( (packet->Saddr == flow->Saddr) && (packet->Sport == flow->Sport) && (packet->Daddr == flow->Daddr) && (packet->Dport == flow->Dport) ){
+			flow->packets.push_back(packet);
+		}
+	}
+}
+
 
 int main(int argc, char* argv[]) {
 	long pktID, time;
@@ -50,7 +64,7 @@ int main(int argc, char* argv[]) {
 	int sPort, dPort, length, weight, default_weight, quantum;
 	std::vector<Flow> flows;
 	bool deficit;
-	File input, output;
+	FILE *input, *output;
 
 	if (argc < 5) {
 		printf("not enough parameters, exiting...");
@@ -64,7 +78,16 @@ int main(int argc, char* argv[]) {
 
 	// init scheduler
     deficit = strcmp("DRR", type) != 0;
-    input = fopen(input_file, RD_ONLY);
+    
+	std::ifstream infile(input_file);
+	//input = fopen(input_file, "r");
+
+	std::string line;
+	while (std::getline(infile, line)) {
+		Packet p = parsePacket(line);
+		push_packet(p, flows);
+	}
+
 
 
 
