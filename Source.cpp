@@ -34,7 +34,7 @@ typedef struct flow_t* Flow;
 
 
 Packet parsePacket(std::string line){
-    Packet p = (Packet)malloc(sizeof(*Packet));
+    Packet p = (Packet)malloc(sizeof(packet_t));
     
     if(!p)
         return NULL;
@@ -73,16 +73,18 @@ int main(int argc, char* argv[]) {
 	quantum = atoi(argv[5]);
 
 	// init scheduler
-    deficit = strcmp("DRR", type) != 0;
+    deficit = strcmp("RR", type) != 0;
     
 	std::ifstream infile(input_file);
-	//input = fopen(input_file, "r");
+	input = fopen(input_file, "r");
 	
-	if (deficit == 0) {
+	if (deficit == false) {
 
 		std::string line;
+		std::getline(infile, line);
+		Packet p = parsePacket(line);
+		
 		while (std::getline(infile, line)) {
-			Packet p = parsePacket(line);
 			push_packet(p, flows);
 			packtime = p->time;
 		}
@@ -93,5 +95,5 @@ int main(int argc, char* argv[]) {
 
 
 
-	return 1;
+	return 0;
 }
