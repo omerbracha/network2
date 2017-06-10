@@ -45,10 +45,10 @@ Packet parsePacket(std::string line, int default_weight){
 //    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
     // use sscanf on line.c_str if this doesn't work
 	if (tokens.size() == 8) {
-		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length, p->weight);
+		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d %d", &p->pId, &p->time, &p->Saddr, &p->Sport, &p->Daddr, &p->Dport, &p->length, &p->weight);
 	}
 	else {
-		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length);
+		sscanf(line.c_str(), "%ld %ld %s %hu %s %hu %d", &p->pId, &p->time, &p->Saddr, &p->Sport, &p->Daddr, &p->Dport, &p->length);
 		p->weight = default_weight;
 	}
 	return p;
