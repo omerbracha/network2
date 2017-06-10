@@ -1,6 +1,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct packet_t{
+  long pId;
+  long time;
+  short[4] Saddr;
+  short Sport;
+  short[4] Daddr;
+  short Dport;
+  int length;
+  int weight;
+};
+
+struct flow_t{
+    queue <Packet> packets; // Packet
+
+};
+
+int init_scheduler(){
+
+}
+
 
 int main(int argc, char* argv[]) {
 	long pktID, time;
@@ -16,6 +36,10 @@ int main(int argc, char* argv[]) {
 	output_file = argv[2];
 	default_weight = atoi(argv[3]);
 	quantum = atoi(argv[4]);
+
+
+
+
 
 
 
