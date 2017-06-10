@@ -39,14 +39,9 @@ Packet parsePacket(std::string line){
     if(!p)
         return NULL;
     std::istringstream some_stream(line);
-    some_stream >> p->pId >> time >> p->Saddr >> p->Sport >>;
-    
-    vector<string> strings;
-    std::istringstream in(line);
-    string s;
-	sscanf(line.c_str);
-    
-    
+    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
+    // use sscanf on line.c_str if this doesn't work
+    return p;
 }
 
 void push_packet(Packet packet, std::vector<Flow> flows) {
