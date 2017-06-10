@@ -1,19 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <queue>
 
 struct packet_t{
   long pId;
   long time;
-  short[4] Saddr;
+  short Saddr[4];
   short Sport;
-  short[4] Daddr;
+  short Daddr[4];
   short Dport;
   int length;
   int weight;
 };
 
 struct flow_t{
-    queue <Packet> packets; // Packet
+    std::deque <packet_t> packets; // Packet
 
 };
 
