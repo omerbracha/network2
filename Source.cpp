@@ -38,9 +38,10 @@ Packet parsePacket(std::string line){
     
     if(!p)
         return NULL;
-    std::istringstream some_stream(line);
-    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
+//    std::istringstream some_stream(line);
+//    some_stream >> p->pId >> p->time >> p->Saddr >> p->Sport >> p->Daddr >> p->Dport >> p->length >> p->weight;
     // use sscanf on line.c_str if this doesn't work
+    sscanf(line.c_str, "%ld %ld %s %hu %s %hu %d %d", p->pId, p->time, p->Saddr, p->Sport, p->Daddr, p->Dport, p->length, p->weight);
     return p;
 }
 
