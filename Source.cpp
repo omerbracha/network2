@@ -5,12 +5,13 @@
 #include <String.h>
 
 
+
 struct packet_t{
   long pId;
   long time;
-  short Saddr[4];
+  char* Saddr;
   short Sport;
-  short Daddr[4];
+  char* Daddr;
   short Dport;
   int length;
   int weight;
@@ -25,8 +26,21 @@ struct flow_t{
 typedef struct flow_t* Flow;
 
 
-Flow* init_scheduler(int type, char* input_file, char* output_file, int default_weight, int quantum){
 
+Packet parsePacket(std::string line){
+    Packet p = (Packet)malloc(sizeof(*Packet));
+    
+    if(!p)
+        return NULL;
+    std::istringstream some_stream(line);
+    some_stream >> p->pId >> time >> p->Saddr >> p->Sport >>;
+    
+    vector<string> strings;
+    std::istringstream in(line);
+    string s;
+    sscanf(line.c_str)
+    
+    
 }
 
 
