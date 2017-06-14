@@ -1,0 +1,21 @@
+﻿  Source.cpp
+Source.cpp(170): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(211): warning C4018: '<': signed/unsigned mismatch
+Source.cpp(106): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+Source.cpp(90): warning C4101: 'input': unreferenced local variable
+Source.cpp(86): warning C4101: 'sAdd': unreferenced local variable
+Source.cpp(87): warning C4101: 'weight': unreferenced local variable
+Source.cpp(85): warning C4101: 'pktID': unreferenced local variable
+Source.cpp(86): warning C4101: 'dAdd': unreferenced local variable
+Source.cpp(87): warning C4101: 'sPort': unreferenced local variable
+Source.cpp(85): warning C4101: 'time': unreferenced local variable
+Source.cpp(87): warning C4101: 'length': unreferenced local variable
+Source.cpp(86): warning C4101: 'ptr': unreferenced local variable
+Source.cpp(87): warning C4101: 'dPort': unreferenced local variable
+  Generating code
+  1 of 462 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  network2.vcxproj -> C:\Users\Omer\documents\visual studio 2017\Projects\network2\Release\network2.exe
